@@ -6,30 +6,25 @@ namespace HGICodingTask
     {
         // Calculates the number of sequences in a FASTQ file
         public static int NumberOfSequences(string filePath){
-            try{
-                int nonBlankLineCounter = 0;
+            int nonBlankLineCounter = 0;
 
-                if(File.Exists(filePath))
+            if(File.Exists(filePath))
+            {
+                if(Path.GetExtension(filePath).Equals(".gz"))
                 {
-                    if(Path.GetExtension(filePath).Equals(".gz"))
-                    {
-                        nonBlankLineCounter = CountSequencesInCompressedFile(filePath);
-                    }
-                    else{
-                        nonBlankLineCounter = CountSequencesInTextFile(filePath);
-                    }             
+                    nonBlankLineCounter = CountSequencesInCompressedFile(filePath);
                 }
-                else throw new FileNotFoundException($"Could not find file at: {filePath}");
+                else{
+                    nonBlankLineCounter = CountSequencesInTextFile(filePath);
+                }             
+            }
+            else throw new FileNotFoundException($"Could not find file at: {filePath}");
 
-                // Division by 4 must only be done on a number that is not zero
-                if(nonBlankLineCounter > 0)
-                    return nonBlankLineCounter / 4;
-                else
-                    return 0;
-            }
-            catch(Exception ex){
-                throw ex;
-            }
+            // Division by 4 must only be done on a number that is not zero
+            if(nonBlankLineCounter > 0)
+                return nonBlankLineCounter / 4;
+            else
+                return 0;
         }
 
         // Count sequences in an uncompressed file format
@@ -75,26 +70,21 @@ namespace HGICodingTask
 
         // Calculates the total number of nucleotides in a FASTQ file
         public static int NumberOfNucleotides(string filePath){
-            try{
-                int nucleotideCount = 0;
+           int nucleotideCount = 0;
 
-                if(File.Exists(filePath))
+            if(File.Exists(filePath))
+            {
+                if(Path.GetExtension(filePath).Equals(".gz"))
                 {
-                    if(Path.GetExtension(filePath).Equals(".gz"))
-                    {
-                        nucleotideCount = CountNucleotidesInCompressedFile(filePath);
-                    }
-                    else{
-                        nucleotideCount = CountNucleotidesInPlainFile(filePath);
-                    }             
+                    nucleotideCount = CountNucleotidesInCompressedFile(filePath);
                 }
-                else throw new FileNotFoundException($"Could not find file at: {filePath}");
+                else{
+                    nucleotideCount = CountNucleotidesInPlainFile(filePath);
+                }             
+            }
+            else throw new FileNotFoundException($"Could not find file at: {filePath}");
 
-                return nucleotideCount;
-            }
-            catch(Exception ex){
-                throw ex;
-            }
+            return nucleotideCount;
         }
 
         private static int CountNucleotidesInPlainFile(string filePath)
